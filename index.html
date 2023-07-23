@@ -1,0 +1,269 @@
+<html>
+ <head>
+  <title>Square Tiles Game</title>
+ </head>
+ <script>
+  var gameStarted = false;
+  var gameOver = false;
+  var RandomTile = 0;
+  var PrevRandomTile = 0;
+  var timerSeconds = 59;
+  var timerDeciSeconds = 10;
+  var Score = 0;
+  var gameOverTimer = false;
+  
+  document.onkeydown = function(e) {
+  if(event.keyCode == 81) {
+     Tile1OnActivate();
+	 startGame();
+    }
+  if(event.keyCode == 87) {
+     Tile2OnActivate();
+	 startGame();
+    }
+  if(event.keyCode == 69) {
+     Tile3OnActivate();
+	 startGame();
+    }
+  if(event.keyCode == 82) {
+     Tile4OnActivate();
+	 startGame();
+    }
+  }
+  
+  function startGame() {
+    scoringSystem();
+    if(gameStarted==false) {
+	 generateRandom();
+	 PrevRandomTile = RandomTile;
+	 timerInterval();
+	}
+    gameStarted = true;
+	if(gameOver==false) {
+	 switch(RandomTile) {
+	  case 1 :
+	   document.getElementById("t1").style.background = "black";
+	   document.getElementById("t2").style.background = "white";
+	   document.getElementById("t3").style.background = "white";
+	   document.getElementById("t4").style.background = "white";
+	  break;
+	  case 2 : 
+	   document.getElementById("t1").style.background = "white";
+	   document.getElementById("t2").style.background = "black";
+	   document.getElementById("t3").style.background = "white";
+	   document.getElementById("t4").style.background = "white";
+	  break;
+	  case 3 :
+       document.getElementById("t1").style.background = "white";
+	   document.getElementById("t2").style.background = "white";
+	   document.getElementById("t3").style.background = "black";
+	   document.getElementById("t4").style.background = "white";	  
+	  break;
+	  case 4 : 
+	   document.getElementById("t1").style.background = "white";
+	   document.getElementById("t2").style.background = "white";
+	   document.getElementById("t3").style.background = "white";
+	   document.getElementById("t4").style.background = "black";
+	  break; 
+	  default : 
+	   document.getElementById("t1").style.background = "white";
+	   document.getElementById("t2").style.background = "white";
+	   document.getElementById("t3").style.background = "white";
+	   document.getElementById("t4").style.background = "white";
+	  break;
+	 }
+	}
+  }
+ 
+  function timerInterval() {
+    setInterval(countdownSeconds,100);
+  }
+  function countdownSeconds() {
+    if(gameOver == false) {
+     timerDeciSeconds--;
+	 if(timerDeciSeconds<=0) {
+	  timerDeciSeconds = 10;
+	  timerSeconds--;
+	 }
+	 document.getElementById("timer").innerHTML = "Timer: " + timerSeconds + "." + timerDeciSeconds;
+     if(timerSeconds==0) {
+	    timerDeciSeconds = 0;
+		gameOverTimer = true;
+	    GameOver();
+	 }
+	}
+  }
+ 
+  function Tile1OnActivate() {
+   if(gameStarted && !gameOver) {
+    switch(RandomTile) {
+	  case 1 :
+	   generateNoRepeat();
+	   Score++;
+	   scoringSystem();
+	  break;
+	  case 2 : 
+	   GameOver();
+	  break;
+	  case 3 :
+       GameOver();
+	  break;
+	  case 4 : 
+	   GameOver();
+	  break;
+	}
+   }
+  }
+  function Tile2OnActivate() {
+    if(gameStarted && !gameOver) {
+     switch(RandomTile) {
+	  case 1 :
+	   GameOver();
+	  break;
+	  case 2 : 
+	   generateNoRepeat();
+	   Score++;
+	   scoringSystem();
+	  break;
+	  case 3 :
+       GameOver();
+	  break;
+	  case 4 : 
+	   GameOver();
+	  break;
+	}
+   }
+  }
+  function Tile3OnActivate() {
+    if(gameStarted && !gameOver) {
+     switch(RandomTile) {
+	  case 1 :
+	   GameOver();
+	  break;
+	  case 2 : 
+	   GameOver();
+	  break;
+	  case 3 :
+       generateNoRepeat();
+	   Score++;
+	   scoringSystem();
+	  break;
+	  case 4 : 
+	   GameOver();
+	  break;
+	}
+   }
+  }
+  function Tile4OnActivate() {
+    if(gameStarted && !gameOver) {
+     switch(RandomTile) {
+	  case 1 :
+	   GameOver();
+	  break;
+	  case 2 : 
+	   GameOver();
+	  break;
+	  case 3 :
+       GameOver();
+	  break;
+	  case 4 : 
+	   generateNoRepeat();
+	   Score++;
+	   scoringSystem();
+	  break;
+	}
+   }
+  }
+  
+  function scoringSystem() {
+   if(gameOver==false) {
+   document.getElementById("score").innerHTML = "Score: " + Score;
+   }
+ }
+  
+  function GameOver() {
+   gameOver = true;
+   document.getElementById("t1").style.background = "red";
+   document.getElementById("t2").style.background = "red";
+   document.getElementById("t3").style.background = "red";
+   document.getElementById("t4").style.background = "red";
+   document.getElementById("unk").style.display = "initial";
+   if(gameOverTimer == false) {
+    document.getElementById("timer").innerHTML = "Timer: " + timerSeconds + "." + timerDeciSeconds;
+	document.getElementById("unk").innerHTML = "Game Over <br> Wrong Tile";
+   } else {
+    document.getElementById("timer").innerHTML = "Timer: " + timerSeconds + "." + timerDeciSeconds;
+    document.getElementById("unk").innerHTML = "Game Over <br> Ran Out of Time";
+   }
+  }
+  
+  function generateNoRepeat() {
+   while(RandomTile==PrevRandomTile) {
+    generateRandom();
+   }
+   PrevRandomTile = RandomTile;
+  }
+  
+  function generateRandom() {
+   RandomTile = Math.ceil(Math.random()*4);
+  }
+ </script>
+ <style>
+  #content {
+  width:80%;
+  margin:auto;
+  text-align:center;
+  border:solid;
+  }
+  table,tr,td {
+  text-align:center;
+  margin:auto;
+  font-size:100pt;
+  table-layout: fixed;
+  width:100%;
+  }
+  .ib {
+  cursor:pointer;
+  width:100%;
+  padding:48%;
+  }
+  
+  #unk {
+  display:none;
+  }
+  
+  #t1 {
+  background:white;
+  }
+  #t2 {
+  background:white;
+  }
+  #t3 {
+  background:white;
+  }
+  #t4 {
+  background:white;
+  }
+ </style>
+ <body>
+ <br><br><br><br><br><br>
+  <div id="content">
+   <h1>Square Tiles Game</h1>
+   <h2>By Khian Victory D. Calderon</h2>
+   <h2>(Inspired by Piano Tiles)</h2>
+   <table>
+    <tr>
+	 <td><button onclick="Tile1OnActivate(); startGame();" id="t1" class="ib"> </button></td>
+	 <td><button onclick="Tile2OnActivate(); startGame();" id="t2" class="ib"> </button></td>
+	 <td><button onclick="Tile3OnActivate(); startGame();" id="t3" class="ib"> </button></td>
+	 <td><button onclick="Tile4OnActivate(); startGame();" id="t4" class="ib"> </button></td>
+	</tr>
+   </table>
+   <h3> <div id="timer">Timer: 60.00</div><div id="score">Score: 0</div></h3>
+    <h1 id ="unk"></h1>
+	<h3>How many tiles can you hit in one minute? <br>
+    Press / click the any tile or any of the Q,W,E,R keys to start the game <br>
+   Refresh this page to restart </h3>
+  </div>
+ </body>
+</html>
